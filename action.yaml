@@ -118,7 +118,6 @@ runs:
         then
           choco install zerotier-one
         fi
-
         echo "# Set zerotier with the given authentification token"
         if [ ! -z "${{ inputs.ZEROTIER_SECRET }}" ]
         then
@@ -142,22 +141,19 @@ runs:
         time=${{ inputs.zerotier_TIMEOUT }}
         while [ ! -e $continue_path ] && [ $time -gt 1 ]
         do
-          networks=$(zerotier-cli -listnetworks)
-          peers=$(zerotier-cli -peers)
-          listpeers=$(zerotier-cli -listpeers)
           echo ""
           echo "#########################################"
           echo "# zerotier listnetworks:"
           echo "#########################################"
-          echo $networks
+          zerotier-cli listnetworks
           echo "#########################################"
           echo "# zerotier peers:"
           echo "#########################################"
-          echo $peers
+          zerotier-cli peers
           echo "#########################################"
           echo "# zerotier listpeers:"
           echo "#########################################"
-          echo $listpeers
+          zerotier-cli listpeers
           echo "#########################################"
           echo "# Allow workflow to continue using:"
           echo "#########################################"
