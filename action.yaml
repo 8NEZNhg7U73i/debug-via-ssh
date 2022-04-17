@@ -139,6 +139,7 @@ runs:
     - name: Start zerotier
       shell: bash
       run: |
+        refreshenv       
         printf "# Starting zerotier..."
         printf " [DONE]\n\n"
         continue_path=$(eval echo ~$(cat ssh_user)/continue)
