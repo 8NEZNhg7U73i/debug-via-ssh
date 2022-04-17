@@ -144,7 +144,7 @@ runs:
       run: |
         Write-Output "# Starting zerotier..."
         Write-Output " [DONE]\n\n"
-        continue_path = $(Write-Output $(Write-Output ssh_user)/continue)
+        Write-Output $(Write-Output $(Write-Output ssh_user)/continue) | Set-Variable -Name continue_path -PassThru
         time = ${{ inputs.zerotier_TIMEOUT }}
         if ( '${{ runner.os }}' -eq 'Windows' ){
           zerotier = "cmd zerotier-cli"
