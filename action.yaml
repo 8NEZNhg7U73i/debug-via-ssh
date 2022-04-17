@@ -142,8 +142,8 @@ runs:
     - name: Start zerotier
       shell: pwsh
       run: |
-        Write-Out "# Starting zerotier..."
-        Write-Out " [DONE]\n\n"
+        Write-Output "# Starting zerotier..."
+        Write-Output " [DONE]\n\n"
         continue_path=$(eval echo ~$(cat ssh_user)/continue)
         time=${{ inputs.zerotier_TIMEOUT }}
         if ( '${{ runner.os }}' -eq 'Windows' ){
@@ -153,30 +153,30 @@ runs:
           zerotier="sudo zerotier-cli"
         }
         while ( ( Test-Path -Path $continue_path ) -and ( $time -gt 1  ) ){
-          echo ""
-          echo "#########################################"
-          echo "# zerotier listnetworks:"
-          echo "#########################################"
+          Write-Output ""
+          Write-Output "#########################################"
+          Write-Output "# zerotier listnetworks:"
+          Write-Output "#########################################"
           Invoke-Expression $zerotier listnetworks
-          echo "#########################################"
-          echo "# zerotier peers:"
-          echo "#########################################"
+          Write-Output "#########################################"
+          Write-Output "# zerotier peers:"
+          Write-Output "#########################################"
           Invoke-Expression $zerotier peers
-          echo "#########################################"
-          echo "# zerotier listpeers:"
-          echo "#########################################"
+          Write-Output "#########################################"
+          Write-Output "# zerotier listpeers:"
+          Write-Output "#########################################"
           Invoke-Expression $zerotier listpeers
-          echo "#########################################"
-          echo "# Allow workflow to continue using:"
-          echo "#########################################"
-          echo "bash -c \"touch $continue_path\""
-          echo "#########################################"
-          echo "# SSH session time left:"
-          echo "########################################"
+          Write-Output "#########################################"
+          Write-Output "# Allow workflow to continue using:"
+          Write-Output "#########################################"
+          Write-Output "bash -c \"touch $continue_path\""
+          Write-Output "#########################################"
+          Write-Output "# SSH session time left:"
+          Write-Output "########################################"
           printf '#%-14s%dh:%02dm:%02ds%-14s#\n' '' $(($time/3600)) $(($time%3600/60)) $(($time%60)) ''
-          echo "########################################"
-          echo ""          
+          Write-Output "########################################"
+          Write-Output ""          
           sleep 60
           time=$(($time-60))
         }
-        echo "# SSH session terminated. Allowing workflow to continue..."
+        Write-Output "# SSH session terminated. Allowing workflow to continue..."
