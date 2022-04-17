@@ -28,6 +28,7 @@ inputs:
     defalut: ""
   ZEROTIER_TIMEOUT:
     description: "Timeout in seconds for ZEROTIER session"
+    required: false
     default: 21500
 runs:
   using: "composite"
