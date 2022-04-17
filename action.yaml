@@ -34,6 +34,7 @@ runs:
   using: "composite"
   steps:
     - name: Check inputs
+      shell: bash
       run: |
         if [ -z "${{ inputs.SSH_PASS }}" ]
         then
@@ -46,9 +47,9 @@ runs:
           echo "ZEROTIER_NETWORK_ID needs to be passed in the 'with' field."
           exit 1
         fi
-      shell: bash
 
     - name: Meet OS specific prerequisites
+      shell: pwsh
       run: |
         if('${{ runner.os }}' -eq 'Linux')
         {
@@ -104,23 +105,23 @@ runs:
           echo "# Change the SSH user password"
             net user $env:UserName ${{ inputs.SSH_PASS }}
         }
-      shell: pwsh
 
     - name: Install and setup zerotier
+      shell: bash
       run: |
         echo "# Install zerotier"
-        if('${{ runner.os }}' -eq 'Linux')
-        {
+        if [ '${{ runner.os }}' -eq 'Linux' ]
+        then
           curl -s https://install.zerotier.com | sudo bash
-        }
-        if('${{ runner.os }}' -eq 'macOS')
-        {
+        fi
+        if [ '${{ runner.os }}' -eq 'macOS' ]
+        then
           brew install --cask zerotier-one
-        }
-        if('${{ runner.os }}' -eq 'Windows')
-        {
+        fi
+        if [ '${{ runner.os }}' -eq 'Windows' ]
+        then
           choco install zerotier-one
-        }
+        fi
         
         echo "# Set zerotier with the given authentification token"
         if [ ! -z "${{ inputs.ZEROTIER_SECRET }}" ]
@@ -135,9 +136,9 @@ runs:
         then
           echo ${{ inputs.ZEROTIER_AUTHTOKEN }} > $(eval echo ~$(cat config_path)/authtoken.secret)
         fi
-      shell: bash
 
     - name: Start zerotier
+      shell: bash
       run: |
         printf "# Starting zerotier..."
 
@@ -181,4 +182,3 @@ runs:
         done
 
         echo "# SSH session terminated. Allowing workflow to continue..."
-      shell: bash
