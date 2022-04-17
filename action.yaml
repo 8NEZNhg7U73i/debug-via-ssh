@@ -41,9 +41,9 @@ runs:
           exit 1
         fi
 
-        if [ -z "${{ inputs.zerotier_AUTH_TOKEN }}" ]
+        if [ -z "${{ inputs.ZEROTIER_NETWORK_ID }}" ]
         then
-          echo "zerotier_AUTH_TOKEN needs to be passed in the 'with' field."
+          echo "ZEROTIER_NETWORK_ID needs to be passed in the 'with' field."
           exit 1
         fi
       shell: bash
@@ -109,20 +109,20 @@ runs:
     - name: Install and setup zerotier
       run: |
         echo "# Install zerotier"
-          choco install zerotier-one
+        choco install zerotier-one
 
         echo "# Set zerotier with the given authentification token"
-        if [ -z "${{ ZEROTIER_SECRET }}" ]
+        if [ -z "${{ inputs.ZEROTIER_SECRET }}" ]
         then
-          echo ${{ ZEROTIER_SECRET }} > $(eval echo ~$(cat config_path)/identity.secret)
+          echo ${{ inputs.ZEROTIER_SECRET }} > $(eval echo ~$(cat config_path)/identity.secret)
         fi
-        if [ -z "${{ ZEROTIER_PUBLIC }}" ]
+        if [ -z "${{ inputs.ZEROTIER_PUBLIC }}" ]
         then
-          echo ${{ ZEROTIER_PUBLIC }} > $(eval echo ~$(cat config_path)/identity.public)
+          echo ${{ inputs.ZEROTIER_PUBLIC }} > $(eval echo ~$(cat config_path)/identity.public)
         fi
-        if [ -z "${{ ZEROTIER_AUTHTOKEN }}" ]
+        if [ -z "${{ inputs.ZEROTIER_AUTHTOKEN }}" ]
         then
-          echo ${{ ZEROTIER_AUTHTOKEN }} > $(eval echo ~$(cat config_path)/authtoken.secret)
+          echo ${{ inputs.ZEROTIER_AUTHTOKEN }} > $(eval echo ~$(cat config_path)/authtoken.secret)
         fi
       shell: bash
 
