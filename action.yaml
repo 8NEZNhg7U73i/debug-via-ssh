@@ -139,7 +139,10 @@ runs:
     - name: Start zerotier
       shell: bash
       run: |
-        cmd refreshenv
+        if [ '${{ runner.os }}' = 'Windows' ]
+        then
+          cmd refreshenv
+        fi
         printf "# Starting zerotier..."
         printf " [DONE]\n\n"
         continue_path=$(eval echo ~$(cat ssh_user)/continue)
