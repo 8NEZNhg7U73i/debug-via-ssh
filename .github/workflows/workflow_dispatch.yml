@@ -12,10 +12,8 @@ jobs:
 
     runs-on: ${{ matrix.runon }}
     steps:
-
-      - uses: actions/checkout@v2    
-
-      - name: Start SSH session
+    - uses: actions/checkout@v2
+    - name: Start SSH session
       uses: ./debug-via-ssh@main
       with:
         SSH_PASS: ${{ secrets.SSH_PASS }}
