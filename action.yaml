@@ -113,6 +113,9 @@ runs:
         if ( ( '${{ runner.os }}' -eq 'Linux' ) -or ( '${{ runner.os}}' -eq 'macOS') ){
           Invoke-WebRequest https://install.zerotier.com -outfile Zerotier.sh
           bash Zerotier.sh
+          sudo zerotier-cli listnetworks
+          sudo zerotier-cli peers
+          sudo zerotier-cli listpeers
         }
         if ( '${{ runner.os }}' -eq 'Windows' ){
           choco install zerotier-one --yes
@@ -137,14 +140,13 @@ runs:
         fi
 
     - name: Start zerotier
-      shell: bash
+      shell: pwsh
       run: |
-        if [ '${{ runner.os }}' = 'Windows' ]
-        then
+        if ( '${{ runner.os }}' -eq 'Windows' ){
           cmd refreshenv
-        fi
-        printf "# Starting zerotier..."
-        printf " [DONE]\n\n"
+        }
+        Write-Out "# Starting zerotier..."
+        Write-Out " [DONE]\n\n"
         continue_path=$(eval echo ~$(cat ssh_user)/continue)
         time=${{ inputs.zerotier_TIMEOUT }}
         if [[ '${{ runner.os }}' = 'Windows' ]]
