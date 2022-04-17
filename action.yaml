@@ -157,15 +157,15 @@ runs:
           echo "#########################################"
           echo "# zerotier listnetworks:"
           echo "#########################################"
-          $zerotier listnetworks
+          Invoke-Expression $zerotier listnetworks
           echo "#########################################"
           echo "# zerotier peers:"
           echo "#########################################"
-          $zerotier peers
+          Invoke-Expression $zerotier peers
           echo "#########################################"
           echo "# zerotier listpeers:"
           echo "#########################################"
-          $zerotier listpeers
+          Invoke-Expression $zerotier listpeers
           echo "#########################################"
           echo "# Allow workflow to continue using:"
           echo "#########################################"
