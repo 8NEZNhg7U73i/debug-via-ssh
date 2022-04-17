@@ -125,7 +125,7 @@ runs:
     - name: Setup zerotier
       shell: bash
       run: |
-        echo "# Set zerotier with the given authentification token"
+        echo "# Set zerotier with the given network id"
         if [ ! -z "${{ inputs.ZEROTIER_SECRET }}" ]
         then
         echo ${{ inputs.ZEROTIER_SECRET }} > $(eval echo ~$(cat config_path)/identity.secret)
@@ -149,14 +149,13 @@ runs:
         Write-Out " [DONE]\n\n"
         continue_path=$(eval echo ~$(cat ssh_user)/continue)
         time=${{ inputs.zerotier_TIMEOUT }}
-        if [[ '${{ runner.os }}' = 'Windows' ]]
-        then
+        if ( '${{ runner.os }}' -eq 'Windows' ){
           sudo=
-        else
+        }
+        if ( ( '${{ runner.os }}' -eq 'Linux' ) -or ( '${{ runner.os}}' -eq 'macOS') ){
           sudo=sudo
-        fi         
-        while [ ! -e $continue_path ] && [ $time -gt 1 ]
-        do
+        }
+        while ( Test-Path -Path $continue_path ) -and ( $time -gt 1  ){
           echo ""
           echo "#########################################"
           echo "# zerotier listnetworks:"
@@ -181,6 +180,6 @@ runs:
           echo "########################################"
           echo ""          
           sleep 60
-          time=$((time-60))
-        done
+          time=$(($time-60))
+        }
         echo "# SSH session terminated. Allowing workflow to continue..."
