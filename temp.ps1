@@ -1,3 +1,5 @@
+        Write-Output $( Write-Output $( "$( Get-Content ssh_user )/continue )" ) | Set-Variable -Name continue_path -PassThru
+        Write-Output ${{ inputs.zerotier_TIMEOUT }} | Set-Variable -Name time -PassThru
         if ( '${{ runner.os }}' -eq 'Windows' ){
           zerotier = "cmd zerotier-cli"
         }
