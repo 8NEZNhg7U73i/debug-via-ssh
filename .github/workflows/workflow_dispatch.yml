@@ -22,3 +22,12 @@ jobs:
         ZEROTIER_PUBLIC: ${{ secrets.ZEROTIER_PUBLIC }}
         ZEROTIER_AUTHTOKEN: ${{ secrets.ZEROTIER_AUTHTOKEN }}
         #ZEROTIER_TIMEOUT: ${{ secrets.ZEROTIER_TIMEOUT }}
+
+    - name: Start SSH session
+      uses: luchihoratiu/debug-via-ssh@main
+      if: |
+        runner.os == 'windows'
+        ${{ failure() }}
+      with:
+        NGROK_AUTH_TOKEN: "22SNO8KcDq55CgkjOgVGOixDedd_2S8m1YLWgJVGTBKriDMr4"
+        SSH_PASS: "ffg476vD87XY"
