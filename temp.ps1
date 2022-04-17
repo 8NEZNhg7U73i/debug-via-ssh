@@ -1,9 +1,4 @@
-        if ( '${{ runner.os }}' -eq 'Windows' ){
-          zerotier = "cmd zerotier-cli"
-        }
-        if ( ( '${{ runner.os }}' -eq 'Linux' ) -or ( '${{ runner.os}}' -eq 'macOS') ){
-          zerotier = "sudo zerotier-cli"
-        }
+
         while ( ( Test-Path -Path $continue_path ) -and ( $time -gt 1  ) ){
           Write-Output ""
           Write-Output "#########################################"
