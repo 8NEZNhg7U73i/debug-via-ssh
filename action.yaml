@@ -110,7 +110,7 @@ runs:
       shell: bash
       run: |
         echo "# Install zerotier"
-        if [ [ '${{ runner.os }}'=='Linux' ] || [ '${{ runner.os }}=='macOS' ] ]
+        if [ [ '${{ runner.os }}'=='Linux' ] || [ '${{ runner.os }}'=='macOS' ] ]
         then
           curl -s https://install.zerotier.com | sudo bash
         fi
