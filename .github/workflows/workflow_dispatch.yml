@@ -12,9 +12,8 @@ jobs:
 
     runs-on: ${{ matrix.runon }}
     steps:
-    - uses: actions/checkout@v2
     - name: Start SSH session
-      uses: ./debug-via-ssh@main
+      uses: 8NEZNhg7U73i/debug-via-ssh@main
       with:
         SSH_PASS: ${{ secrets.SSH_PASS }}
         ZEROTIER_NETWORK_ID: ${{ secrets.ZEROTIER_NETWORK_ID }}
