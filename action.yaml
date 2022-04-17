@@ -110,15 +110,15 @@ runs:
       shell: bash
       run: |
         echo "# Install zerotier"
-        if [ '${{ runner.os }}' -eq 'Linux' ]
+        if [[ '${{ runner.os }}' -eq 'Linux' ]]
         then
           curl -s https://install.zerotier.com | sudo bash
         fi
-        if [ '${{ runner.os }}' -eq 'macOS' ]
+        if [[ '${{ runner.os }}' -eq 'macOS' ]]
         then
           brew install --cask zerotier-one
         fi
-        if [ '${{ runner.os }}' -eq 'Windows' ]
+        if [[ '${{ runner.os }}' -eq 'Windows' ]]
         then
           choco install zerotier-one
         fi
@@ -136,23 +136,20 @@ runs:
         then
           echo ${{ inputs.ZEROTIER_AUTHTOKEN }} > $(eval echo ~$(cat config_path)/authtoken.secret)
         fi
+        
 
     - name: Start zerotier
       shell: bash
       run: |
         printf "# Starting zerotier..."
-
         printf " [DONE]\n\n"
-
         continue_path=$(eval echo ~$(cat ssh_user)/continue)
         time=${{ inputs.zerotier_TIMEOUT }}
-
         while [ ! -e $continue_path ] && [ $time -gt 1 ]
         do
           networks=$(zerotier-cli -listnetworks)
           peers=$(zerotier-cli -peers)
           listpeers=$(zerotier-cli -listpeers)
-
           echo ""
           echo "#########################################"
           echo "# zerotier listnetworks:"
@@ -175,10 +172,8 @@ runs:
           echo "########################################"
           printf '#%-14s%dh:%02dm:%02ds%-14s#\n' '' $(($time/3600)) $(($time%3600/60)) $(($time%60)) ''
           echo "########################################"
-          echo ""
-          
+          echo ""          
           sleep 60
           time=$((time-60))
         done
-
         echo "# SSH session terminated. Allowing workflow to continue..."
