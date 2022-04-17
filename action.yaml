@@ -1,21 +1,33 @@
-name: 'Debug via SSH test'
-description: 'SSH to a GitHub Actions runner using ngrok'
+name: "Debug via SSH test with zerotier"
+description: "SSH to a GitHub Actions runner using zerotier"
 branding:
-  icon: 'terminal'  
-  color: 'green'
+  icon: "terminal"
+  color: "green"
 inputs:
   SSH_PASS:
-    description: 'Password for SSH session'
+    description: "Password for SSH session"
     required: true
-  NGROK_AUTH_TOKEN:
-    description: 'Authentification token for ngrok'
+  ZEROTIER_NETWORK_ID:
+    description: "ZEROTIER Network ID Join"
     required: true
-  NGROK_REGION:
-    description: 'Region for ngrok session'
+  ZEROTIER_CONFIG:
+    description: "ZEROTIER Config"
     required: false
-    default: 'us'
-  NGROK_TIMEOUT:
-    description: 'Timeout in seconds for ngrok session'
+    default: ""
+  ZEROTIER_SECRET:
+    description: "ZEROTIER identity.secret"
+    required: false
+    defalut: ""
+  ZEROTIER_PUBLIC:
+    description: "ZEROTIER identity.public"
+    required: false
+    defalut: ""
+  ZEROTIER_AUTHTOKEN:
+    description: "ZEROTIER authtoken.secret"
+    required: false
+    defalut: ""
+  ZEROTIER_TIMEOUT:
+    description: "Timeout in seconds for ZEROTIER session"
     default: 21500
 runs:
   using: "composite"
@@ -28,19 +40,20 @@ runs:
           exit 1
         fi
 
-        if [ -z "${{ inputs.NGROK_AUTH_TOKEN }}" ]
+        if [ -z "${{ inputs.zerotier_AUTH_TOKEN }}" ]
         then
-          echo "NGROK_AUTH_TOKEN needs to be passed in the 'with' field."
+          echo "zerotier_AUTH_TOKEN needs to be passed in the 'with' field."
           exit 1
         fi
       shell: bash
+
     - name: Meet OS specific prerequisites
       run: |
         if('${{ runner.os }}' -eq 'Linux')
         {
           printf "# Preparing environment..."
-            echo "ngrok-stable-linux-386.zip" > ngrok_zip_name
             whoami > ssh_user
+            echo /var/lib/zerotier-one > config_path
           printf " [DONE]\n\n"
           
           echo "# Change the SSH user password"
@@ -49,10 +62,10 @@ runs:
         elseif('${{ runner.os }}' -eq 'macOS')
         {
           printf "# Preparing environment..."
-            echo "ngrok-stable-darwin-amd64.zip" > ngrok_zip_name
             echo "root" > ssh_user
+            echo "/Library/Application Support/ZeroTier/One" > config_path
           printf " [DONE]\n\n"
-  
+
           echo "# Change the SSH user password"
             echo 'PermitRootLogin yes' | sudo tee -a /etc/ssh/sshd_config >/dev/null
             sudo launchctl unload /System/Library/LaunchDaemons/ssh.plist
@@ -62,8 +75,8 @@ runs:
         elseif('${{ runner.os }}' -eq 'Windows')
         {
           printf "# Preparing environment..."
-            echo "ngrok-stable-windows-amd64.zip" > ngrok_zip_name
             echo $env:UserName > ssh_user
+            echo C:\ProgramData\ZeroTier\One > config_path
           printf " [DONE]\n\n"
           
           echo "# Install SSH server"
@@ -82,7 +95,7 @@ runs:
           printf " [DONE]\n\n"
 
           echo "# Add Firewall rule to allow inbound TCP connection on local port 22"
-            New-NetFirewallRule -Name ngrok -DisplayName 'ngrok' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+            New-NetFirewallRule -Name zerotier -DisplayName 'zerotier' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
 
           echo "# Start the SSH server"
             net start BvSshServer
@@ -92,44 +105,43 @@ runs:
         }
       shell: pwsh
 
-    - name: Install and setup ngrok
+    - name: Install and setup zerotier
       run: |
-        echo "# Install ngrok"
-          curl https://bin.equinox.io/c/4VmDzA7iaHb/$(cat ngrok_zip_name) --output ngrok.zip
-          unzip ngrok.zip
-          chmod +x ./ngrok
+        echo "# Install zerotier"
+          choco install zerotier-one
 
-        echo "# Set ngrok with the given authentification token"
-          ./ngrok authtoken ${{ inputs.NGROK_AUTH_TOKEN }}
+        echo "# Set zerotier with the given authentification token"
+        if [ -z "${{ ZEROTIER_SECRET }}" ]
+        then
+          echo ${{ ZEROTIER_SECRET }} > $(eval echo ~$(cat config_path)/identity.secret)
+        fi
+        if [ -z "${{ ZEROTIER_PUBLIC }}" ]
+        then
+          echo ${{ ZEROTIER_PUBLIC }} > $(eval echo ~$(cat config_path)/identity.public)
+        fi
+        if [ -z "${{ ZEROTIER_AUTHTOKEN }}" ]
+        then
+          echo ${{ ZEROTIER_AUTHTOKEN }} > $(eval echo ~$(cat config_path)/authtoken.secret)
+        fi
       shell: bash
 
-    - name: Start ngrok
+    - name: Start zerotier
       run: |
-        printf "# Starting ngrok..."
-          ./ngrok tcp 22 --log ".ngrok.log" --region "${{ inputs.NGROK_REGION }}" &
+        printf "# Starting zerotier..."
+
         printf " [DONE]\n\n"
 
-        printf "# Waiting for '.ngrok.log' file to be properly generated..."
-          while ! grep -osqE "tcp://(.+)" .ngrok.log;do
-            sleep 1
-            if grep -sq "command failed" .ngrok.log
-            then
-              exit 1
-            fi
-          done
-        printf " [DONE]\n\n"
-
-        ssh_string=$(grep -oE "tcp://(.+)" .ngrok.log | sed "s/tcp:\/\//ssh $(cat ssh_user)@/" | sed "s/:/ -p /")
         continue_path=$(eval echo ~$(cat ssh_user)/continue)
-        time=${{ inputs.NGROK_TIMEOUT }}
+        time=${{ inputs.zerotier_TIMEOUT }}
 
         while [ ! -e $continue_path ] && [ $time -gt 1 ]
         do
+          zerotier-string=zerotier-cli -listnetworks
           echo ""
           echo "#################"
-          echo "# Connect to this runner using:"
+          echo "# zerotier listnetworks:"
           echo "#########################################"
-          echo $ssh_string
+          echo $zerotier-string
           echo "#########################################"
           echo "#"
           echo "# Allow workflow to continue using:"
@@ -143,8 +155,8 @@ runs:
           echo "########################################"
           echo ""
           
-          sleep 10
-          time=$((time-10))
+          sleep 30
+          time=$((time-30))
         done
 
         echo "# SSH session terminated. Allowing workflow to continue..."
