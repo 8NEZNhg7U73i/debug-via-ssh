@@ -118,7 +118,7 @@ runs:
         then
           choco install zerotier-one
         fi
-        
+
         echo "# Set zerotier with the given authentification token"
         if [ ! -z "${{ inputs.ZEROTIER_SECRET }}" ]
         then
@@ -132,7 +132,6 @@ runs:
         then
           echo ${{ inputs.ZEROTIER_AUTHTOKEN }} > $(eval echo ~$(cat config_path)/authtoken.secret)
         fi
-        
 
     - name: Start zerotier
       shell: bash
