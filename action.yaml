@@ -111,7 +111,7 @@ runs:
       run: |
         echo "# Install zerotier"
         if ( ( '${{ runner.os }}' -eq 'Linux' ) -or ( '${{ runner.os}}' -eq 'macOS') ){
-          Invoke-WebRequest https://install.zerotier.com -outfile Zerotier.sh | fl
+          Invoke-WebRequest https://install.zerotier.com -outfile Zerotier.sh
           bash Zerotier.sh
         }
         if ( '${{ runner.os }}' -eq 'Windows' ){
@@ -123,6 +123,7 @@ runs:
 
     - name: Setup zerotier
       shell: bash
+      run: |
         echo "# Set zerotier with the given authentification token"
         if [ ! -z "${{ inputs.ZEROTIER_SECRET }}" ]
         then
