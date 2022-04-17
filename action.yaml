@@ -115,10 +115,8 @@ runs:
           bash Zerotier.sh
         }
         if ( '${{ runner.os }}' -eq 'Windows' ){
-          Invoke-WebRequest "https://download.zerotier.com/dist/ZeroTier%20One.msi" -outfile "C:\ZeroTier%20One.msi"
-          #msiexec /i ".\ZeroTier One.msi"
-          cmd "C:\Windows\System32\msiexec.exe" /i "C:\ZeroTier%20One.msi" /qn /norestart
-          #choco install zerotier-one --yes
+          choco install zerotier-one --yes
+          refreshenv
         }
 
     - name: Setup zerotier
