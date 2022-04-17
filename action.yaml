@@ -61,7 +61,7 @@ runs:
           echo "# Change the SSH user password"
             echo "${{ inputs.SSH_PASS }}`n${{ inputs.SSH_PASS }}" | sudo passwd $(cat ssh_user)
         }
-        elseif('${{ runner.os }}' -eq 'macOS')
+        if('${{ runner.os }}' -eq 'macOS')
         {
           printf "# Preparing environment..."
             echo "root" > ssh_user
@@ -74,7 +74,7 @@ runs:
             sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist
             echo "${{ inputs.SSH_PASS }}`n${{ inputs.SSH_PASS }}" | sudo passwd "root"
         }
-        elseif('${{ runner.os }}' -eq 'Windows')
+        if('${{ runner.os }}' -eq 'Windows')
         {
           printf "# Preparing environment..."
             echo $env:UserName > ssh_user
@@ -110,15 +110,11 @@ runs:
       shell: bash
       run: |
         echo "# Install zerotier"
-        if [[ '${{ runner.os }}' -eq 'Linux' ]]
+        if [ [ '${{ runner.os }}'=='Linux' ] | [ '${{ runner.os }}=='macOS' ] ]
         then
           curl -s https://install.zerotier.com | sudo bash
         fi
-        if [[ '${{ runner.os }}' -eq 'macOS' ]]
-        then
-          brew install --cask zerotier-one
-        fi
-        if [[ '${{ runner.os }}' -eq 'Windows' ]]
+        if [ [ '${{ runner.os }}'=='Windows' ] ]
         then
           choco install zerotier-one
         fi
