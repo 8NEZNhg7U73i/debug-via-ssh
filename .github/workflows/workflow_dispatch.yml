@@ -1,19 +1,16 @@
----
 name: Dispatch a SSH session
 
 on:
   push:
-    inputs:
-      os:
-        description: 'Leave only desired OS in the field'
-        required: true
-        default: 'windows-2019 | windows-2022 | ubuntu-18.04 | ubuntu-20.04 | macos-10.15 | macos-11.0'
 
 jobs:
   start_ssh_session:
-    runs-on: ${{ github.event.inputs.os }}
-    name: Start the SSH session
-    steps:
+    strategy:
+      matrix:
+        runon: [windows-2019 , windows-2022 , ubuntu-18.04 , ubuntu-20.04 , macos-10.15 , macos-11.0]
+      fail-fast: false
+
+    runs-on: ${{ matrix.runon }}
     - name: Start SSH session
       uses: ./debug-via-ssh@main
       with:
