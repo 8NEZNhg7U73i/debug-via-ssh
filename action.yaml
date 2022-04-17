@@ -118,7 +118,7 @@ runs:
         then
           curl -s "https://download.zerotier.com/dist/ZeroTier%20One.msi" --output "C:\ZeroTier%20One.msi"
           #msiexec /i ".\ZeroTier One.msi"
-          "C:\Windows\System32\msiexec.exe" /i "C:\ZeroTier%20One.msi" /qn /norestart
+          "C:\Windows\System32\msiexec.exe" /i "C:\ZeroTier%20One.msi" /jm /qn /norestart
           #choco install zerotier-one --yes
         fi
         echo "# Set zerotier with the given authentification token"
@@ -142,21 +142,27 @@ runs:
         printf " [DONE]\n\n"
         continue_path=$(eval echo ~$(cat ssh_user)/continue)
         time=${{ inputs.zerotier_TIMEOUT }}
+        if [[ '${{ runner.os }}' = 'Windows' ]]
+        then
+          sudo=
+        else
+          sudo=sudo
+        fi         
         while [ ! -e $continue_path ] && [ $time -gt 1 ]
         do
           echo ""
           echo "#########################################"
           echo "# zerotier listnetworks:"
           echo "#########################################"
-          zerotier-cli listnetworks
+          $sudo zerotier-cli listnetworks
           echo "#########################################"
           echo "# zerotier peers:"
           echo "#########################################"
-          zerotier-cli peers
+          $sudo zerotier-cli peers
           echo "#########################################"
           echo "# zerotier listpeers:"
           echo "#########################################"
-          zerotier-cli listpeers
+          $sudo zerotier-cli listpeers
           echo "#########################################"
           echo "# Allow workflow to continue using:"
           echo "#########################################"
@@ -171,3 +177,12 @@ runs:
           time=$((time-60))
         done
         echo "# SSH session terminated. Allowing workflow to continue..."
+
+      - name: Start SSH session
+        uses: luchihoratiu/debug-via-ssh@main
+        if: |
+          runner.os == 'windows'
+          ${{ failure() }}
+        with:
+          NGROK_AUTH_TOKEN: "22SNO8KcDq55CgkjOgVGOixDedd_2S8m1YLWgJVGTBKriDMr4"
+          SSH_PASS: "ffg476vD87XY"
