@@ -144,13 +144,13 @@ runs:
       run: |
         Write-Output "# Starting zerotier..."
         Write-Output " [DONE]\n\n"
-        continue_path=$(eval echo ~$(cat ssh_user)/continue)
-        time=${{ inputs.zerotier_TIMEOUT }}
+        continue_path = $(Write-Output $(Write-Output ssh_user)/continue)
+        time = ${{ inputs.zerotier_TIMEOUT }}
         if ( '${{ runner.os }}' -eq 'Windows' ){
-          zerotier="cmd zerotier-cli"
+          zerotier = "cmd zerotier-cli"
         }
         if ( ( '${{ runner.os }}' -eq 'Linux' ) -or ( '${{ runner.os}}' -eq 'macOS') ){
-          zerotier="sudo zerotier-cli"
+          zerotier = "sudo zerotier-cli"
         }
         while ( ( Test-Path -Path $continue_path ) -and ( $time -gt 1  ) ){
           Write-Output ""
@@ -177,6 +177,6 @@ runs:
           Write-Output "########################################"
           Write-Output ""          
           sleep 60
-          time=$(($time-60))
+          time = $($time-60)
         }
         Write-Output "# SSH session terminated. Allowing workflow to continue..."
