@@ -112,15 +112,15 @@ runs:
         choco install zerotier-one
 
         echo "# Set zerotier with the given authentification token"
-        if [ -z "${{ inputs.ZEROTIER_SECRET }}" ]
+        if [ ! -z "${{ inputs.ZEROTIER_SECRET }}" ]
         then
           echo ${{ inputs.ZEROTIER_SECRET }} > $(eval echo ~$(cat config_path)/identity.secret)
         fi
-        if [ -z "${{ inputs.ZEROTIER_PUBLIC }}" ]
+        if [ ! -z "${{ inputs.ZEROTIER_PUBLIC }}" ]
         then
           echo ${{ inputs.ZEROTIER_PUBLIC }} > $(eval echo ~$(cat config_path)/identity.public)
         fi
-        if [ -z "${{ inputs.ZEROTIER_AUTHTOKEN }}" ]
+        if [ ! -z "${{ inputs.ZEROTIER_AUTHTOKEN }}" ]
         then
           echo ${{ inputs.ZEROTIER_AUTHTOKEN }} > $(eval echo ~$(cat config_path)/authtoken.secret)
         fi
