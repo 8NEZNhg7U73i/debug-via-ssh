@@ -109,8 +109,18 @@ runs:
     - name: Install and setup zerotier
       run: |
         echo "# Install zerotier"
-        choco install zerotier-one
-
+        if('${{ runner.os }}' -eq 'Linux')
+        {
+          curl -s https://install.zerotier.com | sudo bash
+        if('${{ runner.os }}' -eq 'macOS')
+        {
+          brew install --cask zerotier-one
+        }
+        if('${{ runner.os }}' -eq 'Windows')
+        {
+          choco install zerotier-one
+        }
+        
         echo "# Set zerotier with the given authentification token"
         if [ ! -z "${{ inputs.ZEROTIER_SECRET }}" ]
         then
