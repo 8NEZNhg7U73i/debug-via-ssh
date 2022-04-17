@@ -107,7 +107,7 @@ runs:
         }
 
     - name: Install zerotier
-      shell: powershell
+      shell: pwsh
       run: |
         echo "# Install zerotier"
         if ( ( '${{ runner.os }}' -eq 'Linux' ) -or ( '${{ runner.os}}' -eq 'macOS') ){
