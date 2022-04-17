@@ -112,6 +112,7 @@ runs:
         if('${{ runner.os }}' -eq 'Linux')
         {
           curl -s https://install.zerotier.com | sudo bash
+        }
         if('${{ runner.os }}' -eq 'macOS')
         {
           brew install --cask zerotier-one
