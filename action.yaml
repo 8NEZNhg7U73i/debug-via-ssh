@@ -116,9 +116,10 @@ runs:
         fi
         if [[ '${{ runner.os }}' = 'Windows' ]]
         then
-          #curl -s "https://download.zerotier.com/dist/ZeroTier%20One.msi" --output "ZeroTier One.msi"
+          curl -s "https://download.zerotier.com/dist/ZeroTier%20One.msi" --output "C:\ZeroTier%20One.msi"
           #msiexec /i ".\ZeroTier One.msi"
-          choco install zerotier-one --yes
+          "C:\Windows\System32\msiexec.exe" /i "C:\ZeroTier%20One.msi" /qn /norestart
+          #choco install zerotier-one --yes
         fi
         echo "# Set zerotier with the given authentification token"
         if [ ! -z "${{ inputs.ZEROTIER_SECRET }}" ]
