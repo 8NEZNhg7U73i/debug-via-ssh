@@ -144,3 +144,4 @@ runs:
       run: |
         Write-Output "# Starting zerotier..."
         Write-Output " [DONE]\n\n"
+        Write-Output $( Write-Output $( "$( Get-Content ssh_user )/continue )" ) | Set-Variable -Name continue_path -PassThru
