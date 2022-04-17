@@ -137,27 +137,36 @@ runs:
 
         while [ ! -e $continue_path ] && [ $time -gt 1 ]
         do
-          zerotier-string=zerotier-cli -listnetworks
+          networks=zerotier-cli -listnetworks
+          peers=zerotier-cli -peers
+          listpeers=zerotier-cli -listpeers
+
           echo ""
-          echo "#################"
+          echo "#########################################"
           echo "# zerotier listnetworks:"
           echo "#########################################"
-          echo $zerotier-string
+          echo $networks
           echo "#########################################"
-          echo "#"
+          echo "# zerotier peers:"
+          echo "#########################################"
+          echo $peers
+          echo "#########################################"
+          echo "# zerotier listpeers:"
+          echo "#########################################"
+          echo $listpeers
+          echo "#########################################"
           echo "# Allow workflow to continue using:"
           echo "#########################################"
           echo "bash -c \"touch $continue_path\""
           echo "#########################################"
-          echo "#"
           echo "# SSH session time left:"
           echo "########################################"
           printf '#%-14s%dh:%02dm:%02ds%-14s#\n' '' $(($time/3600)) $(($time%3600/60)) $(($time%60)) ''
           echo "########################################"
           echo ""
           
-          sleep 30
-          time=$((time-30))
+          sleep 60
+          time=$((time-60))
         done
 
         echo "# SSH session terminated. Allowing workflow to continue..."
