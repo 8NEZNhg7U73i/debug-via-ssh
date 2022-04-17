@@ -118,7 +118,7 @@ runs:
         then
           #curl -s "https://download.zerotier.com/dist/ZeroTier%20One.msi" --output "ZeroTier One.msi"
           #msiexec /i ".\ZeroTier One.msi"
-          choco install zerotier-one         
+          choco install zerotier-one --yes
         fi
         echo "# Set zerotier with the given authentification token"
         if [ ! -z "${{ inputs.ZEROTIER_SECRET }}" ]
