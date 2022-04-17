@@ -106,33 +106,35 @@ runs:
             net user $env:UserName ${{ inputs.SSH_PASS }}
         }
 
-    - name: Install and setup zerotier
-      shell: bash
+    - name: Install zerotier
+      shell: powershell
       run: |
         echo "# Install zerotier"
-        if [[ '${{ runner.os }}' = 'Linux' || '${{ runner.os }}' = 'macOS' ]]
-        then
-          curl -s https://install.zerotier.com | sudo bash
-        fi
-        if [[ '${{ runner.os }}' = 'Windows' ]]
-        then
-          curl -s "https://download.zerotier.com/dist/ZeroTier%20One.msi" --output "C:\ZeroTier%20One.msi"
+        if ( ( '${{ runner.os }}' -eq 'Linux' ) -or ( '${{ runner.os}}' -eq 'macOS') ){
+          Invoke-WebRequest https://install.zerotier.com -outfile Zerotier.sh | fl
+          bash Zerotier.sh
+        }
+        if ( '${{ runner.os }}' -eq 'Windows' ){
+          Invoke-WebRequest "https://download.zerotier.com/dist/ZeroTier%20One.msi" -outfile "C:\ZeroTier%20One.msi"
           #msiexec /i ".\ZeroTier One.msi"
-          "C:\Windows\System32\msiexec.exe" /i "C:\ZeroTier%20One.msi" /jm /qn /norestart
+          "C:\Windows\System32\msiexec.exe" /i "C:\ZeroTier%20One.msi" /qn /norestart
           #choco install zerotier-one --yes
-        fi
+        }
+
+    - name: Setup zerotier
+      shell: bash
         echo "# Set zerotier with the given authentification token"
         if [ ! -z "${{ inputs.ZEROTIER_SECRET }}" ]
         then
-          echo ${{ inputs.ZEROTIER_SECRET }} > $(eval echo ~$(cat config_path)/identity.secret)
+        echo ${{ inputs.ZEROTIER_SECRET }} > $(eval echo ~$(cat config_path)/identity.secret)
         fi
         if [ ! -z "${{ inputs.ZEROTIER_PUBLIC }}" ]
         then
-          echo ${{ inputs.ZEROTIER_PUBLIC }} > $(eval echo ~$(cat config_path)/identity.public)
+        echo ${{ inputs.ZEROTIER_PUBLIC }} > $(eval echo ~$(cat config_path)/identity.public)
         fi
         if [ ! -z "${{ inputs.ZEROTIER_AUTHTOKEN }}" ]
         then
-          echo ${{ inputs.ZEROTIER_AUTHTOKEN }} > $(eval echo ~$(cat config_path)/authtoken.secret)
+        echo ${{ inputs.ZEROTIER_AUTHTOKEN }} > $(eval echo ~$(cat config_path)/authtoken.secret)
         fi
 
     - name: Start zerotier
@@ -177,4 +179,3 @@ runs:
           time=$((time-60))
         done
         echo "# SSH session terminated. Allowing workflow to continue..."
-
