@@ -149,9 +149,9 @@ runs:
 
         while [ ! -e $continue_path ] && [ $time -gt 1 ]
         do
-          networks=zerotier-cli -listnetworks
-          peers=zerotier-cli -peers
-          listpeers=zerotier-cli -listpeers
+          networks=$(zerotier-cli -listnetworks)
+          peers=$(zerotier-cli -peers)
+          listpeers=$(zerotier-cli -listpeers)
 
           echo ""
           echo "#########################################"
