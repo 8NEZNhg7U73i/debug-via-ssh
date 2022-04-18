@@ -150,7 +150,7 @@ runs:
       run: |
         Write-Output "# Starting zerotier..."
         Write-Output " [DONE]\n\n"
-        Write-Output $( $( "$PWD/continue" ) ) | Set-Variable -Name continue_path -PassThru
+        Write-Output $( $( "$PWDcontinue" ) ) | Set-Variable -Name continue_path -PassThru
         Write-Output ${{ inputs.zerotier_TIMEOUT }} | Set-Variable -Name time -PassThru
         if ( '${{ runner.os }}' -eq 'Windows' ){
           Write-Output "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe -q" | Set-Variable -Name zerotier
@@ -187,7 +187,7 @@ runs:
           Write-Output "###########################################################################"
           Write-Output "Allow workflow to continue using:"
           Write-Output "###########################################################################"
-          Write-Output "bash -c touch $continue_path"
+          Write-Output "pwsh New-Item $continue_path"
           Write-Output "###########################################################################"
           Write-Output "SSH session time left:"
           Write-Output "###########################################################################"
