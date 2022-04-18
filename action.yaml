@@ -152,7 +152,7 @@ runs:
         if ( ( '${{ runner.os }}' -eq 'Linux' ) -or ( '${{ runner.os}}' -eq 'macOS') ){
           Write-Output "sudo zerotier-cli" | Set-Variable -Name zerotier
         }
-        while ( ( Test-Path -Path $continue_path ) -and ( $time -gt 1  ) ){
+        while ( ! ( Test-Path -Path $continue_path ) -and ( $time -gt 1  ) ){
           Write-Output ""
           Write-Output "#########################################"
           Write-Output "# zerotier listnetworks:"
