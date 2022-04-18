@@ -120,7 +120,6 @@ runs:
         if ( '${{ runner.os }}' -eq 'Windows' ){
           choco install zerotier-one --yes
           refreshenv
-          zerotier-cli listpeers
         }
 
     - name: Setup zerotier
@@ -148,7 +147,7 @@ runs:
         Write-Output $( $( "$( Get-Content ssh_user )/continue" ) ) | Set-Variable -Name continue_path -PassThru
         Write-Output ${{ inputs.zerotier_TIMEOUT }} | Set-Variable -Name time -PassThru
         if ( '${{ runner.os }}' -eq 'Windows' ){
-          Write-Output "zerotier-cli.bat" | Set-Variable -Name zerotier
+          Write-Output "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe -q" | Set-Variable -Name zerotier
         }
         if ( ( '${{ runner.os }}' -eq 'Linux' ) -or ( '${{ runner.os}}' -eq 'macOS') ){
           Write-Output "sudo zerotier-cli" | Set-Variable -Name zerotier
