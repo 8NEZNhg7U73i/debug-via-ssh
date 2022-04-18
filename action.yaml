@@ -30,6 +30,11 @@ inputs:
     description: "Timeout in seconds for ZEROTIER session"
     required: false
     default: 21000
+  ZEROTIER_VERBOSE:
+    description: "Set value true to show zerotier with json format"
+    required: false
+    default: ""
+
 runs:
   using: "composite"
   steps:
@@ -152,23 +157,31 @@ runs:
         if ( ( '${{ runner.os }}' -eq 'Linux' ) -or ( '${{ runner.os}}' -eq 'macOS') ){
           Write-Output "sudo zerotier-cli" | Set-Variable -Name zerotier
         }
+        if ( '${{ inputs.ZEROTIER_VERBOSE }}' -eq 'true' ){
+          Write-Output "-j" | Set-Variable -Name json
+        }
         while ( ! ( Test-Path -Path $continue_path ) -and ( $time -gt 1  ) ){
           Set-Variable -Name HH -Value $( [math]::Floor( $time / 3600 ) )
           Set-Variable -Name MM -Value $( [math]::Floor( $time % 3600 / 60 ) )
           Set-Variable -Name SS -Value $( [math]::Floor( $time % 60 ) )
           Write-Output ""
+          Write-Output ""
+          Write-Output "###########################################################################"
+          Write-Output "zerotier info:"
+          Write-Output "###########################################################################"
+          Invoke-Expression "$zerotier info $json"
           Write-Output "###########################################################################"
           Write-Output "zerotier listnetworks:"
           Write-Output "###########################################################################"
-          Invoke-Expression "$zerotier listnetworks"
+          Invoke-Expression "$zerotier listnetworks $json"
           Write-Output "###########################################################################"
           Write-Output "zerotier peers:"
           Write-Output "###########################################################################"
-          Invoke-Expression "$zerotier peers"
+          Invoke-Expression "$zerotier peers $json"
           Write-Output "###########################################################################"
           Write-Output "zerotier listpeers:"
           Write-Output "###########################################################################"
-          Invoke-Expression "$zerotier listpeers"
+          Invoke-Expression "$zerotier listpeers $json"
           Write-Output "###########################################################################"
           Write-Output "Allow workflow to continue using:"
           Write-Output "###########################################################################"
@@ -178,6 +191,7 @@ runs:
           Write-Output "###########################################################################"
           Write-Output "$HH H $MM M $SS S"
           Write-Output "###########################################################################"
+          Write-Output ""
           Write-Output ""
           Start-Sleep 60
           Write-Output "$($time-60)" | Set-Variable -Name time
