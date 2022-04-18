@@ -143,6 +143,7 @@ runs:
         then
         echo ${{ inputs.ZEROTIER_AUTHTOKEN }} > $(eval echo ~$(cat config_path)/authtoken.secret)
         fi
+        
 
     - name: Start zerotier
       shell: pwsh
@@ -160,6 +161,7 @@ runs:
         if ( '${{ inputs.ZEROTIER_VERBOSE }}' -eq 'true' ){
           Write-Output "-j" | Set-Variable -Name json
         }
+        Invoke-Expression "$zerotier join '${{ inputs.ZEROTIER_NETWORK_ID }}'"
         while ( ! ( Test-Path -Path $continue_path ) -and ( $time -gt 1  ) ){
           Set-Variable -Name HH -Value $( [math]::Floor( $time / 3600 ) )
           Set-Variable -Name MM -Value $( [math]::Floor( $time % 3600 / 60 ) )
