@@ -150,7 +150,7 @@ runs:
       run: |
         Write-Output "# Starting zerotier..."
         Write-Output " [DONE]\n\n"
-        Write-Output $( $( "$( Get-Content ssh_user )/continue" ) ) | Set-Variable -Name continue_path -PassThru
+        Write-Output $( $( ""$PWD"/continue" ) ) | Set-Variable -Name continue_path -PassThru
         Write-Output ${{ inputs.zerotier_TIMEOUT }} | Set-Variable -Name time -PassThru
         if ( '${{ runner.os }}' -eq 'Windows' ){
           Write-Output "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe -q" | Set-Variable -Name zerotier
