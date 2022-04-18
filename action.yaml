@@ -120,6 +120,7 @@ runs:
         if ( '${{ runner.os }}' -eq 'Windows' ){
           choco install zerotier-one --yes
           refreshenv
+          zerotier-cli listpeers
         }
 
     - name: Setup zerotier
@@ -153,9 +154,9 @@ runs:
           Write-Output "sudo zerotier-cli" | Set-Variable -Name zerotier
         }
         while ( ! ( Test-Path -Path $continue_path ) -and ( $time -gt 1  ) ){
-          Set-Variable -Name HH -Value $( [int][math]::Floor( $time / 3600 ) )
-          Set-Variable -Name MM -Value $( [int][math]::Floor( $time % 3600 / 60 ) )
-          Set-Variable -Name SS -Value $( [int][math]::Floor( $time % 60 ) )
+          Set-Variable -Name HH -Value $( [math]::Floor( $time / 3600 ) )
+          Set-Variable -Name MM -Value $( [math]::Floor( $time % 3600 / 60 ) )
+          Set-Variable -Name SS -Value $( [math]::Floor( $time % 60 ) )
           Write-Output ""
           Write-Output "###########################################################################"
           Write-Output "zerotier listnetworks:"
