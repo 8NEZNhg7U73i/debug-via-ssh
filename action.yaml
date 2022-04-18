@@ -157,15 +157,15 @@ runs:
           Write-Output "#########################################"
           Write-Output "# zerotier listnetworks:"
           Write-Output "#########################################"
-          Invoke-Expression $zerotier listnetworks
+          Invoke-Expression ( $zerotier listnetworks )
           Write-Output "#########################################"
           Write-Output "# zerotier peers:"
           Write-Output "#########################################"
-          Invoke-Expression $zerotier peers
+          Invoke-Expression ( $zerotier peers )
           Write-Output "#########################################"
           Write-Output "# zerotier listpeers:"
           Write-Output "#########################################"
-          Invoke-Expression $zerotier listpeers
+          Invoke-Expression ( $zerotier listpeers )
           Write-Output "#########################################"
           Write-Output "# Allow workflow to continue using:"
           Write-Output "#########################################"
