@@ -152,15 +152,6 @@ runs:
         if ( ( '${{ runner.os }}' -eq 'Linux' ) -or ( '${{ runner.os}}' -eq 'macOS') ){
           Write-Output "sudo zerotier-cli" | Set-Variable -Name zerotier
         }
-        if ( '${{ input.ZEROTIER_SECRET }}' -eq '$null' ){
-          Write-Output "'${{ input.ZEROTIER_SECRET }}'" | Set-Variable -Name identity.secret
-        }
-        if ( '${{ input.ZEROTIER_PUBLIC }}' -eq '$null' ){
-          Write-Output "'${{ input.ZEROTIER_PUBLIC }}'" | Set-Variable -Name identity.public
-        }
-        if ( '${{ input.ZEROTIER_AUTHTOKEN }}' -eq '$null' ){
-          Write-Output "'${{ input.ZEROTIER_AUTHTOKEN }}'" | Set-Variable -Name authtoken.secret
-        }
         while ( ! ( Test-Path -Path $continue_path ) -and ( $time -gt 1  ) ){
           Set-Variable -Name HH -Value $( [int][math]::Floor( $time / 3600 ) )
           Set-Variable -Name MM -Value $( [int][math]::Floor( $time % 3600 / 60 ) )
@@ -187,9 +178,8 @@ runs:
           Write-Output "###########################################################################"
           Write-Output "$HH H $MM M $SS S"
           Write-Output "###########################################################################"
-          Write-Output ""          
+          Write-Output ""
           Start-Sleep 60
           Write-Output "$($time-60)" | Set-Variable -Name time
         }
         Write-Output "# SSH session terminated. Allowing workflow to continue..."
-
