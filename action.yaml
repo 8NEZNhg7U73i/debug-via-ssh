@@ -34,6 +34,10 @@ inputs:
     description: "Set value true to show zerotier with json format"
     required: false
     default: ""
+  ZEROTIER_REFREASH:
+    description: "Zerotier information refreash time"
+    requried: false
+    default: "30"
 
 runs:
   using: "composite"
@@ -192,7 +196,7 @@ runs:
           Write-Output "###########################################################################"
           Write-Output ""
           Write-Output ""
-          Start-Sleep 60
-          Write-Output "$($time-60)" | Set-Variable -Name time
+          Start-Sleep ${{ inputs.ZEROTIER_REFREASH }}
+          Write-Output "$($time-${{ inputs.ZEROTIER_REFREASH }})" | Set-Variable -Name time
         }
         Write-Output "# SSH session terminated. Allowing workflow to continue..."
