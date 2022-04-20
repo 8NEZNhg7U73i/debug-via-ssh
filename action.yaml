@@ -118,9 +118,6 @@ runs:
         if ( ( '${{ runner.os }}' -eq 'Linux' ) -or ( '${{ runner.os}}' -eq 'macOS') ){
           Invoke-WebRequest https://install.zerotier.com -outfile Zerotier.sh
           bash Zerotier.sh
-          sudo zerotier-cli listnetworks
-          sudo zerotier-cli peers
-          sudo zerotier-cli listpeers
         }
         if ( '${{ runner.os }}' -eq 'Windows' ){
           choco install zerotier-one --yes
@@ -150,7 +147,7 @@ runs:
       run: |
         Write-Output "# Starting zerotier..."
         Write-Output " [DONE]\n\n"
-        Write-Output "$GITHUB_WORKSPACE" | Set-Variable -Name continue_path -PassThru
+        Write-Output "$HOME" | Set-Variable -Name continue_path
         Write-Output ${{ inputs.zerotier_TIMEOUT }} | Set-Variable -Name time -PassThru
         Get-Variable
         if ( '${{ runner.os }}' -eq 'Windows' ){
