@@ -122,7 +122,7 @@ runs:
         echo "# Install zerotier"
         if ( ( '${{ runner.os }}' -eq 'Linux' ) -or ( '${{ runner.os}}' -eq 'macOS') ){
           Invoke-WebRequest https://install.zerotier.com -outfile Zerotier.sh
-          bash Zerotier.sh
+          sudo bash Zerotier.sh
         }
         if ( '${{ runner.os }}' -eq 'Windows' ){
           choco install zerotier-one --yes
