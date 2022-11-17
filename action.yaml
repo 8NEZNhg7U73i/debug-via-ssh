@@ -38,6 +38,8 @@ inputs:
     description: "Zerotier information refreash time"
     requried: false
     default: "30"
+  ZEROTIER_info:
+
 
 runs:
   using: "composite"
@@ -188,7 +190,7 @@ runs:
           Write-Output "###########################################################################"
           Write-Output "Allow workflow to continue using:"
           Write-Output "###########################################################################"
-          Write-Output "bash -c touch $continue_path"
+          Write-Output "pwsh New-Item $continue_path"
           Write-Output "###########################################################################"
           Write-Output "SSH session time left:"
           Write-Output "###########################################################################"
