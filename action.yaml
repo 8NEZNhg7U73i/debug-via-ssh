@@ -38,7 +38,6 @@ inputs:
     description: "Zerotier information refreash time"
     requried: false
     default: "30"
-  ZEROTIER_info:
 
 
 runs:
