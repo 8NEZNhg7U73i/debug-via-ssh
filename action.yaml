@@ -126,7 +126,7 @@ runs:
         }
         if ( '${{ runner.os }}' -eq 'Windows' ){
           choco install zerotier-one --yes
-          refreshenv
+          #refreshenv
         }
 
     - name: Setup zerotier
