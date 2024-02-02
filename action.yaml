@@ -70,6 +70,7 @@ runs:
           
           echo "# Change the SSH user password"
             echo "${{ inputs.SSH_PASS }}`n${{ inputs.SSH_PASS }}" | sudo passwd $(cat ssh_user)
+            echo $(cat ssh_user) > username
         }
         if('${{ runner.os }}' -eq 'macOS')
         {
@@ -83,6 +84,7 @@ runs:
             sudo launchctl unload /System/Library/LaunchDaemons/ssh.plist
             sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist
             echo "${{ inputs.SSH_PASS }}`n${{ inputs.SSH_PASS }}" | sudo passwd "root"
+            echo root > username
         }
         if('${{ runner.os }}' -eq 'Windows')
         {
@@ -114,6 +116,7 @@ runs:
 
           echo "# Change the SSH user password"
             net user $env:UserName ${{ inputs.SSH_PASS }}
+            echo $env:UserName > username
         }
 
     - name: Install zerotier
@@ -170,6 +173,10 @@ runs:
           Set-Variable -Name SS -Value $( [math]::Floor( $time % 60 ) )
           Write-Output ""
           Write-Output ""
+          Write-Output "###########################################################################"
+          Write-Output "username:"
+          Write-Output "###########################################################################"
+          Get-Content username
           Write-Output "###########################################################################"
           Write-Output "zerotier info:"
           Write-Output "###########################################################################"
