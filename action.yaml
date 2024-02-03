@@ -226,7 +226,7 @@ runs:
           Write-Host "Allow workflow to continue using:"
           Write-Host "###########################################################################"
           Write-Host "pwsh -c \"New-Item $continue_path\""
-          Write-Out "pwsh -c \"New-Item $continue_path\""
+          Write-Output "pwsh -c \"New-Item $continue_path\""
           Write-Host "###########################################################################"
           Write-Host "SSH session time left:"
           Write-Host "###########################################################################"
