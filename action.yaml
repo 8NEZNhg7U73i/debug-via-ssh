@@ -212,7 +212,7 @@ runs:
 
 
 
-Get-NetIPAddress | Where-Object InterfaceAlias -Match "zerotier" | Where-Object AddressFamily -eq IPv4 | Select-Object IPAddress | Set-Variable -Name ipaddressgv
+#Get-NetIPAddress | Where-Object InterfaceAlias -Match "zerotier" | Where-Object AddressFamily -eq IPv4 | Select-Object IPAddress | Set-Variable -Name ipaddressgv
 
 
 
