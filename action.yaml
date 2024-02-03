@@ -127,14 +127,8 @@ runs:
           printf " [DONE]\n\n"
           
           echo "# Install SSH server"
-            Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*'
-            Get-Service wuauserv
             Set-Service -Name wuauserv -StartupType Manual
-            Start-Service wuauserv
-            Get-WindowsCapability -Name RSAT* -Online | Add-WindowsCapability -Online
             Get-WindowsCapability -Name Open* -Online | Add-WindowsCapability -Online
-            Get-Service wuauserv
-            Add-WindowsCapability -Online -Name OpenSSH*
 
           echo "# Add Firewall rule to allow inbound TCP connection on local port 22"
             if (!(Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -ErrorAction SilentlyContinue | Select-Object Name, Enabled)) {
@@ -200,6 +194,7 @@ runs:
         }
         Get-Content username | Set-Variable -Name username
         Invoke-Expression "$zerotier join '${{ inputs.ZEROTIER_NETWORK_ID }}'"
+        Start-Sleep 3
         while ( ! ( Test-Path -Path $continue_path ) -and ( $time -gt 1  ) ){
           Set-Variable -Name HH -Value $( [math]::Floor( $time / 3600 ) )
           Set-Variable -Name MM -Value $( [math]::Floor( $time % 3600 / 60 ) )
