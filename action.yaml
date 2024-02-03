@@ -166,6 +166,7 @@ runs:
         if ( '${{ inputs.ZEROTIER_VERBOSE }}' -eq 'true' ){
           Write-Output "-j" | Set-Variable -Name json
         }
+        Get-Content username | Set-Variable -Name username
         Invoke-Expression "$zerotier join '${{ inputs.ZEROTIER_NETWORK_ID }}'"
         while ( ! ( Test-Path -Path $continue_path ) -and ( $time -gt 1  ) ){
           Set-Variable -Name HH -Value $( [math]::Floor( $time / 3600 ) )
@@ -176,7 +177,7 @@ runs:
           Write-Output "###########################################################################"
           Write-Output "username:"
           Write-Output "###########################################################################"
-          Get-Content username
+          write-Output "ssh ${username}@
           Write-Output "###########################################################################"
           Write-Output "zerotier info:"
           Write-Output "###########################################################################"
@@ -196,7 +197,7 @@ runs:
           Write-Output "###########################################################################"
           Write-Output "Allow workflow to continue using:"
           Write-Output "###########################################################################"
-          Write-Output "pwsh New-Item $continue_path"
+          Write-Output "pwsh -c "New-Item $continue_path""
           Write-Output "###########################################################################"
           Write-Output "SSH session time left:"
           Write-Output "###########################################################################"
@@ -208,3 +209,10 @@ runs:
           Write-Output "$($time-${{ inputs.ZEROTIER_REFREASH }})" | Set-Variable -Name time
         }
         Write-Output "# SSH session terminated. Allowing workflow to continue..."
+
+
+
+Get-NetIPAddress | Where-Object InterfaceAlias -Match "zerotier" | Where-Object AddressFamily -eq IPv4 | Select-Object IPAddress | Set-Variable -Name ipaddressgv
+
+
+
