@@ -128,16 +128,16 @@ runs:
           
           echo "# Install SSH server"
             Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*'
-            $currentWU = Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "UseWUServer" | select -ExpandProperty UseWUServer
-            Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "UseWUServer" -Value 0
+            #$currentWU = Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "UseWUServer" | select -ExpandProperty UseWUServer
+            #Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "UseWUServer" -Value 0
+            Get-Service wuauserv
             Restart-Service wuauserv
             Get-WindowsCapability -Name RSAT* -Online | Add-WindowsCapability -Online
-            Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "UseWUServer" -Value $currentWU
+            #Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "UseWUServer" -Value $currentWU
             Restart-Service wuauserv
             Get-WindowsCapability -Name Open* -Online | Add-WindowsCapability -Online
-            Get-service
-            Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
-            Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
+            Get-Service wuauserv
+            Add-WindowsCapability -Online -Name OpenSSH*
 
           echo "# Add Firewall rule to allow inbound TCP connection on local port 22"
             if (!(Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -ErrorAction SilentlyContinue | Select-Object Name, Enabled)) {
