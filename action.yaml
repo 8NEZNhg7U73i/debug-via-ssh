@@ -128,14 +128,10 @@ runs:
           
           echo "# Install SSH server"
             Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*'
-            #$currentWU = Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "UseWUServer" | select -ExpandProperty UseWUServer
-            #Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "UseWUServer" -Value 0
             Get-Service wuauserv
             Set-Service -Name wuauserv -StartupType Manual
-            Restart-Service wuauserv
+            Start-Service wuauserv
             Get-WindowsCapability -Name RSAT* -Online | Add-WindowsCapability -Online
-            #Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "UseWUServer" -Value $currentWU
-            Restart-Service wuauserv
             Get-WindowsCapability -Name Open* -Online | Add-WindowsCapability -Online
             Get-Service wuauserv
             Add-WindowsCapability -Online -Name OpenSSH*
