@@ -226,7 +226,7 @@ runs:
           Write-Host "Allow workflow to continue using:"
           Write-Host "###########################################################################"
           Write-Host "pwsh -c \"New-Item $continue_path\""
-          Write-Output "pwsh -c \"New-Item $continue_path\""
+          Write-Host $("pwsh -c " + '"' + "New-Item $($continue_path)" + '"')
           Write-Host "###########################################################################"
           Write-Host "SSH session time left:"
           Write-Host "###########################################################################"
@@ -241,7 +241,7 @@ runs:
 
 
 
-#Get-NetIPAddress | Where-Object InterfaceAlias -Match "zerotier" | Where-Object AddressFamily -eq IPv4 | Select-Object IPAddress | Set-Variable -Name ipaddressgv
+#Get-NetIPAddress | Where-Object InterfaceAlias -Match "zerotier" | Where-Object AddressFamily -eq IPv4 | Select-Object -ExpandProperty IPAddress | Set-Variable -Name ipaddress
 
 
 
