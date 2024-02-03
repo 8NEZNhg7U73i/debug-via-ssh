@@ -197,7 +197,7 @@ runs:
           Write-Output "###########################################################################"
           Write-Output "Allow workflow to continue using:"
           Write-Output "###########################################################################"
-          Write-Output "pwsh -c "New-Item $continue_path""
+          Write-Output 'pwsh -c "New-Item $continue_path"'
           Write-Output "###########################################################################"
           Write-Output "SSH session time left:"
           Write-Output "###########################################################################"
