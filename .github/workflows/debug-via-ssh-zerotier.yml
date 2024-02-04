@@ -22,8 +22,8 @@ jobs:
         choco install cygwin
         choco install everything
         choco install es
-        choco install visualstudio2022community --package-parameters "--allWorkloads --includeRecommended --includeOptional --passive --locale en-US"
-        choco install visualstudio2019buildtools
+        choco install visualstudio2019community --package-parameters "--allWorkloads --includeRecommended --includeOptional --passive --locale en-US"
+        #choco install visualstudio2019buildtools
         setx NASM_PREFIX C:\Program Files\NASM\
         setx CYGWIN_HOME C:\tools\cygwin\
     - name: Start SSH session
