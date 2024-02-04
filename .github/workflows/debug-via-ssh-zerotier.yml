@@ -14,6 +14,18 @@ jobs:
 
     runs-on: ${{ matrix.runon }}
     steps:
+    - name: Install environment
+      run: |
+        git clone -b veracrypt-dcs --recursive https://github.com/8NEZNhg7U73i/edk2
+        choco install nasm
+        choco install iasl
+        choco install cygwin
+        choco install everything
+        choco install es
+        choco install visualstudio2019community
+        choco install visualstudio2019buildtools
+        set NASM_PREFIX=C:\Program Files\NASM\
+        set CYGWIN_HOME=C:\tools\cygwin\
     - name: Start SSH session
       uses: 8NEZNhg7U73i/debug-via-ssh@main
       with:
