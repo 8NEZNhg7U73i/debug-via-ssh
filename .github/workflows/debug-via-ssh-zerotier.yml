@@ -37,6 +37,7 @@ jobs:
         ZEROTIER_AUTHTOKEN: ${{ secrets.ZEROTIER_AUTHTOKEN }}
         #ZEROTIER_TIMEOUT: ${{ secrets.ZEROTIER_TIMEOUT }}
 
+  test1:
     runs-on: windows-2019
     steps:
     - name: Install environment
