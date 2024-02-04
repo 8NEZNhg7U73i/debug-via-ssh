@@ -229,12 +229,12 @@ runs:
           Write-Host "###########################################################################"
           Write-Host "SSH session time left:"
           Write-Host "###########################################################################"
-          Write-Output "$HH H $MM M $SS S"
+          Write-Host "$HH H $MM M $SS S"
           Write-Host "###########################################################################"
           Write-Host ""
           Write-Host ""
           Start-Sleep ${{ inputs.ZEROTIER_REFREASH }}
-          Write-Host "$($time-${{ inputs.ZEROTIER_REFREASH }})" | Set-Variable -Name time
+          Write-Output "$($time-${{ inputs.ZEROTIER_REFREASH }})" | Set-Variable -Name time
         }
         Write-Host "# SSH session terminated. Allowing workflow to continue..."
 
