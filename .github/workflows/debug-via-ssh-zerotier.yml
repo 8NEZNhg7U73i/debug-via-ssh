@@ -24,8 +24,8 @@ jobs:
         choco install es
         choco install visualstudio2019community
         choco install visualstudio2019buildtools
-        set NASM_PREFIX=C:\Program Files\NASM\
-        set CYGWIN_HOME=C:\tools\cygwin\
+        setx NASM_PREFIX C:\Program Files\NASM\
+        setx CYGWIN_HOME C:\tools\cygwin\
     - name: Start SSH session
       uses: 8NEZNhg7U73i/debug-via-ssh@main
       with:
