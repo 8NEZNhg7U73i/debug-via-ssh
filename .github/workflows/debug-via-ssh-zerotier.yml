@@ -22,7 +22,7 @@ jobs:
         choco install cygwin
         choco install everything
         choco install es
-        choco install visualstudio2019community --package-parameters "--allWorkloads --includeRecommended --includeOptional --passive --locale en-US"
+        choco install visualstudio2019community --package-parameters " --installPath D:\VS2019 --allWorkloads --includeRecommended --includeOptional --passive --locale en-US"
         #choco install visualstudio2019buildtools
         setx NASM_PREFIX C:\Program Files\NASM\
         setx CYGWIN_HOME C:\tools\cygwin\
