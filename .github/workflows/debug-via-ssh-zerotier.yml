@@ -7,61 +7,12 @@ jobs:
   test:
     strategy:
       matrix:
-        runon: [windows-2022]
-        #runon: [windows-2022, windows-2019, Ubuntu-22.04, Ubuntu-20.04, macOS-14, macOS-13, macOS-12, macOS-11]
+        runon: [windows-2022, windows-2019, Ubuntu-22.04, Ubuntu-20.04, macOS-14, macOS-13, macOS-12, macOS-11]
         # , windows-2022 , ubuntu-18.04 , ubuntu-20.04 , macos-10.15 , macos-11.0]
       fail-fast: false
 
-    runs-on: windows-2022
+    runs-on: ${{ matrix.runon }}
     steps:
-    - name: Install environment
-      run: |
-        git clone -b veracrypt-dcs --recursive https://github.com/8NEZNhg7U73i/edk2
-        mkdir edk2\BaseTools\Bin\Win32 
-        choco install -y nasm
-        choco install -y iasl
-        choco install -y cygwin
-        choco install -y everything
-        choco install -y es
-        choco install -y llvm
-        choco install visualstudio2019community --package-parameters "--installPath D:\VS2019 --norestart --nocache --add Microsoft.VisualStudio.Component.VC.CoreBuildTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.Tools.ARM --add Microsoft.VisualStudio.Component.VC.Tools.ARM64 --no-update --allWorkloads --includeRecommended --includeOptional --passive --locale en-US"
-        setx NASM_PREFIX "C:\Program Files\NASM\"
-        setx CYGWIN_HOME "C:\tools\cygwin\"
-        setx PYTHON_HOME "D:\a\debug-via-ssh\debug-via-ssh\edk2\pythonhome"
-    - name: Start SSH session
-      uses: 8NEZNhg7U73i/debug-via-ssh@main
-      with:
-        SSH_PASS: ${{ secrets.SSH_PASS }}
-        ZEROTIER_NETWORK_ID: ${{ secrets.ZEROTIER_NETWORK_ID }}
-        ZEROTIER_CONFIG: ${{ secrets.ZEROTIER_CONFIG }}
-        ZEROTIER_SECRET: ${{ secrets.ZEROTIER_SECRET }}
-        ZEROTIER_PUBLIC: ${{ secrets.ZEROTIER_PUBLIC }}
-        ZEROTIER_AUTHTOKEN: ${{ secrets.ZEROTIER_AUTHTOKEN }}
-        #ZEROTIER_TIMEOUT: ${{ secrets.ZEROTIER_TIMEOUT }}
-
-  test1:
-    runs-on: windows-2019
-    steps:
-    - name: Install environment
-      run: |
-        git clone -b veracrypt-dcs --recursive https://github.com/8NEZNhg7U73i/edk2
-        mkdir edk2\BaseTools\Bin\Win32 
-        choco install -y nasm
-        choco install -y iasl
-        choco install -y cygwin
-        choco install -y everything
-        choco install -y es
-        choco install -y llvm
-        #choco install visualstudio2019Enterprise --package-parameters "--installPath D:\VS2019 --norestart --nocache --add Microsoft.VisualStudio.Component.VC.CoreBuildTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.Tools.ARM --add Microsoft.VisualStudio.Component.VC.Tools.ARM64 --no-update --allWorkloads --includeRecommended --includeOptional --passive --locale en-US"
-        #vs_buildtools.exe --quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Component.VC.CoreBuildTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows11SDK.22000 --add Microsoft.VisualStudio.Component.VC.Tools.ARM --add Microsoft.VisualStudio.Component.VC.Tools.ARM64
-        #choco install visualstudio2019buildtools
-        setx NASM_PREFIX "C:\Program Files\NASM\"
-        setx CYGWIN_HOME "C:\tools\cygwin\"
-        setx PYTHON_HOME "D:\a\debug-via-ssh\debug-via-ssh\edk2\pythonhome"
-        #mklink /j "C:\ProgramData\Docker" "D:\ProgramData\Docker"
-        #mklink /j "C:\ProgramData\DockerDesktop" "D:\ProgramData\DockerDesktop"
-        #mklink /j "C:\Program Files\Docker" "D:\Program Files\Docker"
-        #mklink /j "C:\Users\xxx\AppData\Local\Docker" "D:\Users\xxx\AppData\Local\Docker"
     - name: Start SSH session
       uses: 8NEZNhg7U73i/debug-via-ssh@main
       with:
