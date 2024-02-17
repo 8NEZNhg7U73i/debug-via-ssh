@@ -86,38 +86,6 @@ runs:
             echo "${{ inputs.SSH_PASS }}`n${{ inputs.SSH_PASS }}" | sudo passwd "root"
             echo root > username
         }
-        if('${{ runner.os }}' -eq 'Windows1')
-        {
-          printf "# Preparing environment..."
-            echo $env:UserName > ssh_user
-            echo C:\ProgramData\ZeroTier\One > config_path
-          printf " [DONE]\n\n"
-          
-          echo "# Install SSH server"
-            curl https://dl.bitvise.com/BvSshServer-Inst.exe --output BvSshServer-Inst.exe
-            .\BvSshServer-Inst.exe -acceptEULA -defaultInstance
-
-          printf "# Setting up the SSH server to allow access..."
-            $cfg = new-object -com "Bitvise.Bsscfg"
-            $cfg.settings.SetDefaults()
-            $cfg.settings.access.SetDefaults()
-            $cfg.settings.access.winGroups.Clear()
-            $cfg.settings.access.winGroups.new.SetDefaults()
-            $cfg.settings.access.winGroups.new.loginAllowed = $true
-            $cfg.settings.access.winGroups.NewCommit()
-            $cfg.settings.Save()
-          printf " [DONE]\n\n"
-
-          echo "# Add Firewall rule to allow inbound TCP connection on local port 22"
-            New-NetFirewallRule -Name zerotier -DisplayName 'zerotier' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
-
-          echo "# Start the SSH server"
-            net start BvSshServer
-
-          echo "# Change the SSH user password"
-            net user $env:UserName ${{ inputs.SSH_PASS }}
-            echo $env:UserName > username
-        }
 
         if('${{ runner.os }}' -eq 'Windows')
         {
@@ -155,7 +123,6 @@ runs:
         }
         if ( '${{ runner.os }}' -eq 'Windows' ){
           choco install zerotier-one --yes
-          #refreshenv
         }
 
     - name: Setup zerotier
@@ -200,47 +167,40 @@ runs:
           Set-Variable -Name HH -Value $( [math]::Floor( $time / 3600 ) )
           Set-Variable -Name MM -Value $( [math]::Floor( $time % 3600 / 60 ) )
           Set-Variable -Name SS -Value $( [math]::Floor( $time % 60 ) )
-          Write-Host ""
-          Write-Host ""
-          Write-Host "###########################################################################"
+          Write-Output ""
+          Write-Output ""
+          Write-Output "###########################################################################"
           Write-Host "username:"
-          Write-Host "###########################################################################"
+          Write-Output "###########################################################################"
           Write-Host "ssh ${username}@"
-          Write-Host "###########################################################################"
+          Write-Output "###########################################################################"
           Write-Host "zerotier info:"
-          Write-Host "###########################################################################"
+          Write-Output "###########################################################################"
           Invoke-Expression "$zerotier info $json"
-          Write-Host "###########################################################################"
-          Write-Host "zerotier listnetworks:"
-          Write-Host "###########################################################################"
+          Write-Output "###########################################################################"
+          Write-Output "zerotier listnetworks:"
+          Write-Output "###########################################################################"
           Invoke-Expression "$zerotier listnetworks $json"
-          Write-Host "###########################################################################"
-          Write-Host "zerotier peers:"
-          Write-Host "###########################################################################"
-          #Invoke-Expression "$zerotier peers $json"
-          Write-Host "###########################################################################"
-          Write-Host "zerotier listpeers:"
-          Write-Host "###########################################################################"
-          #Invoke-Expression "$zerotier listpeers $json"
-          Write-Host "###########################################################################"
-          Write-Host "Allow workflow to continue using:"
-          Write-Host "###########################################################################"
+          Write-Output "###########################################################################"
+          Write-Output "zerotier peers:"
+          Write-Output "###########################################################################"
+          Invoke-Expression "$zerotier peers $json"
+          Write-Output "###########################################################################"
+          Write-Output "zerotier listpeers:"
+          Write-Output "###########################################################################"
+          Invoke-Expression "$zerotier listpeers $json"
+          Write-Output "###########################################################################"
+          Write-Output "Allow workflow to continue using:"
+          Write-Output "###########################################################################"
           Write-Host $("pwsh -c " + '"' + "New-Item $($continue_path)" + '"')
-          Write-Host "###########################################################################"
-          Write-Host "SSH session time left:"
-          Write-Host "###########################################################################"
+          Write-Output "###########################################################################"
+          Write-Output "SSH session time left:"
+          Write-Output "###########################################################################"
           Write-Host "$HH H $MM M $SS S"
-          Write-Host "###########################################################################"
-          Write-Host ""
-          Write-Host ""
+          Write-Output "###########################################################################"
+          Write-Output ""
+          Write-Output ""
           Start-Sleep ${{ inputs.ZEROTIER_REFREASH }}
           Write-Output "$($time-${{ inputs.ZEROTIER_REFREASH }})" | Set-Variable -Name time
         }
-        Write-Host "# SSH session terminated. Allowing workflow to continue..."
-
-
-
-#Get-NetIPAddress | Where-Object InterfaceAlias -Match "zerotier" | Where-Object AddressFamily -eq IPv4 | Select-Object -ExpandProperty IPAddress | Set-Variable -Name ipaddress
-
-
-
+        Write-Output "# SSH session terminated. Allowing workflow to continue..."
